@@ -13,7 +13,12 @@ export default function CrossRecommendationsPage() {
   const {
     userData, addBook, addShow, hasBook, hasShow, getBookRating, getShowRating,
     setBookRating, setShowRating, getBookStatus, getShowStatus, setBookStatus, setShowStatus,
-    getBookReview, getShowReview,
+    getBookReview, getShowReview, setBookReview, setShowReview, deleteBookReview, deleteShowReview,
+    updateBookProgress, updateShowProgress, updateBookDates, updateShowDates,
+    addBookNote, updateBookNote, deleteBookNote,
+    addShowNote, updateShowNote, deleteShowNote,
+    addBookTag, removeBookTag,
+    addShowTag, removeShowTag,
     isLoading: userDataLoading
   } = useUserData();
   const [direction, setDirection] = useState<'books-from-shows' | 'shows-from-books'>('books-from-shows');
@@ -43,7 +48,7 @@ export default function CrossRecommendationsPage() {
       onRatingChange: isInList ? (rating: number) => setBookRating(book.id, rating) : undefined,
       status: isInList ? getBookStatus(book.id) : undefined,
       onStatusChange: isInList ? (status: BookStatus) => setBookStatus(book.id, status) : undefined,
-      progressPercentage: userBook?.progress?.percentage,
+      progressPercentage: userBook?.progressPercentage,
       hasReview: !!review,
       customTags: userBook?.customTags,
     };
@@ -65,7 +70,7 @@ export default function CrossRecommendationsPage() {
       onRatingChange: isInList ? (rating: number) => setShowRating(show.id, rating) : undefined,
       status: isInList ? getShowStatus(show.id) : undefined,
       onStatusChange: isInList ? (status: ShowStatus) => setShowStatus(show.id, status) : undefined,
-      progressPercentage: userShow?.progress?.percentage,
+      progressPercentage: userShow?.progressPercentage,
       hasReview: !!review,
       customTags: userShow?.customTags,
     };
@@ -401,13 +406,111 @@ export default function CrossRecommendationsPage() {
         )}
       </div>
 
-      {selectedItem && (
-        <EnhancedDetailModal
-          item={selectedItem}
-          type={selectedType}
-          onClose={() => setSelectedItem(null)}
-        />
-      )}
+      {selectedItem && (() => {
+        const isInList = selectedType === 'book' ? hasBook(selectedItem.id) : hasShow(selectedItem.id);
+        const userBook = selectedType === 'book' ? userData.readBooks.find(ub => ub.book.id === selectedItem.id) : undefined;
+        const userShow = selectedType === 'show' ? userData.watchedShows.find(us => us.show.id === selectedItem.id) : undefined;
+        
+        return (
+          <EnhancedDetailModal
+            item={selectedItem}
+            type={selectedType}
+            onClose={() => setSelectedItem(null)}
+            isInList={isInList}
+            rating={selectedType === 'book' 
+              ? (isInList ? getBookRating(selectedItem.id) : undefined)
+              : (isInList ? getShowRating(selectedItem.id) : undefined)
+            }
+            onRatingChange={selectedType === 'book'
+              ? (isInList ? (rating: number) => setBookRating(selectedItem.id, rating) : undefined)
+              : (isInList ? (rating: number) => setShowRating(selectedItem.id, rating) : undefined)
+            }
+            status={selectedType === 'book'
+              ? (isInList ? getBookStatus(selectedItem.id) : undefined)
+              : (isInList ? getShowStatus(selectedItem.id) : undefined)
+            }
+            onStatusChange={selectedType === 'book'
+              ? (isInList ? (status: any) => setBookStatus(selectedItem.id, status as BookStatus) : undefined)
+              : (isInList ? (status: any) => setShowStatus(selectedItem.id, status as ShowStatus) : undefined)
+            }
+            progress={selectedType === 'book' && userBook
+              ? {
+                  currentPage: userBook.currentPage,
+                  pagesRead: userBook.pagesRead,
+                  progressPercentage: userBook.progressPercentage,
+                }
+              : selectedType === 'show' && userShow
+              ? {
+                  currentSeason: userShow.currentSeason,
+                  currentEpisode: userShow.currentEpisode,
+                  episodesWatched: userShow.episodesWatched,
+                  progressPercentage: userShow.progressPercentage,
+                }
+              : undefined
+            }
+            onProgressUpdate={selectedType === 'book'
+              ? (progress) => updateBookProgress(selectedItem.id, progress)
+              : (progress) => updateShowProgress(selectedItem.id, progress)
+            }
+            dates={selectedType === 'book' && userBook
+              ? {
+                  startDate: userBook.startDate,
+                  finishDate: userBook.finishDate,
+                }
+              : selectedType === 'show' && userShow
+              ? {
+                  startDate: userShow.startDate,
+                  finishDate: userShow.finishDate,
+                }
+              : undefined
+            }
+            onDatesUpdate={selectedType === 'book'
+              ? (dates) => updateBookDates(selectedItem.id, dates)
+              : (dates) => updateShowDates(selectedItem.id, dates)
+            }
+            review={selectedType === 'book'
+              ? getBookReview(selectedItem.id)
+              : getShowReview(selectedItem.id)
+            }
+            onReviewSave={selectedType === 'book'
+              ? (review) => setBookReview(selectedItem.id, review)
+              : (review) => setShowReview(selectedItem.id, review)
+            }
+            onReviewDelete={selectedType === 'book'
+              ? () => deleteBookReview(selectedItem.id)
+              : () => deleteShowReview(selectedItem.id)
+            }
+            notes={selectedType === 'book'
+              ? userBook?.notes
+              : userShow?.notes
+            }
+            onNoteAdd={selectedType === 'book'
+              ? (note) => addBookNote(selectedItem.id, note)
+              : (note) => addShowNote(selectedItem.id, note)
+            }
+            onNoteUpdate={selectedType === 'book'
+              ? (noteId, updates) => updateBookNote(selectedItem.id, noteId, updates)
+              : (noteId, updates) => updateShowNote(selectedItem.id, noteId, updates)
+            }
+            onNoteDelete={selectedType === 'book'
+              ? (noteId) => deleteBookNote(selectedItem.id, noteId)
+              : (noteId) => deleteShowNote(selectedItem.id, noteId)
+            }
+            customTags={selectedType === 'book'
+              ? userBook?.customTags
+              : userShow?.customTags
+            }
+            onTagAdd={selectedType === 'book'
+              ? (tag) => addBookTag(selectedItem.id, tag)
+              : (tag) => addShowTag(selectedItem.id, tag)
+            }
+            onTagRemove={selectedType === 'book'
+              ? (tag) => removeBookTag(selectedItem.id, tag)
+              : (tag) => removeShowTag(selectedItem.id, tag)
+            }
+          />
+        );
+      })()}
     </div>
   );
 }

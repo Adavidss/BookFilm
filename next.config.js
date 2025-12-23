@@ -3,11 +3,27 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     // Allow images from common book/TV metadata sources
-    domains: [
-      'image.tmdb.org',
-      'books.google.com',
-      'covers.openlibrary.org',
-      'm.media-amazon.com'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'books.google.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'covers.openlibrary.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'books.google.com',
+      },
     ],
   },
 }
