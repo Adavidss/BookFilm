@@ -1,0 +1,62 @@
+{
+  "description": "Sample collaborative filtering data - 'Users who liked X also liked Y'",
+  "usage": "Import this in recommendationEngine.ts to add collaborative signals",
+  "format": "Map of item IDs to array of similar item IDs",
+
+  "books": {
+    "book-dune": [
+      "book-foundation",
+      "book-hyperion",
+      "book-left-hand-of-darkness"
+    ],
+    "book-1984": [
+      "book-brave-new-world",
+      "book-fahrenheit-451",
+      "book-handmaids-tale"
+    ],
+    "book-lotr": [
+      "book-hobbit",
+      "book-name-of-the-wind",
+      "book-way-of-kings"
+    ]
+  },
+
+  "shows": {
+    "tv-breaking-bad": [
+      "tv-better-call-saul",
+      "tv-ozark",
+      "tv-sopranos"
+    ],
+    "tv-game-of-thrones": [
+      "tv-house-of-the-dragon",
+      "tv-witcher",
+      "tv-wheel-of-time"
+    ],
+    "tv-stranger-things": [
+      "tv-dark",
+      "tv-umbrella-academy",
+      "tv-black-mirror"
+    ]
+  },
+
+  "cross": {
+    "description": "Cross-recommendations between books and shows",
+    "book-to-show": {
+      "book-dune": ["tv-foundation", "tv-expanse"],
+      "book-witcher": ["tv-witcher", "tv-game-of-thrones"],
+      "book-game-of-thrones": ["tv-game-of-thrones", "tv-house-of-the-dragon"]
+    },
+    "show-to-book": {
+      "tv-breaking-bad": ["book-savages", "book-power-of-the-dog"],
+      "tv-stranger-things": ["book-it", "book-firestarter"],
+      "tv-westworld": ["book-do-androids-dream", "book-neuromancer"]
+    }
+  },
+
+  "implementation_notes": [
+    "This data can be manually curated based on your taste",
+    "Or aggregated from friends' reading/watching lists",
+    "Or imported from external 'similar items' services",
+    "To use: Load this JSON and merge with content-based recommendations"
+  ]
+}
