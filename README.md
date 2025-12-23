@@ -203,6 +203,12 @@ The app features a mobile-first design with:
 
 ## Deployment
 
+### ⚠️ Important: Environment Variables
+
+**Before deploying, you MUST add your API keys to Vercel!**
+
+See [VERCEL_SETUP.md](./VERCEL_SETUP.md) for detailed step-by-step instructions on adding environment variables to Vercel.
+
 ### Deploy to Vercel (Recommended - Free)
 
 The easiest way to get your app live:

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Layout from '@/components/Layout';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export const metadata: Metadata = {
   title: 'ShowBook Recommender',
@@ -22,11 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <ErrorBoundary>
-          <Layout>{children}</Layout>
-        </ErrorBoundary>
+        <ThemeProvider>
+          <ErrorBoundary>
+            <Layout>{children}</Layout>
+          </ErrorBoundary>
+        </ThemeProvider>
       </body>
     </html>
   );

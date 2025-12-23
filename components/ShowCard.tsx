@@ -48,9 +48,10 @@ export default function ShowCard({
             src={show.posterImage}
             alt={show.title}
             fill
-            className="object-contain"
+            className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority={priority}
+            unoptimized
           />
         ) : (
           <div className="h-full flex items-center justify-center text-gray-400">

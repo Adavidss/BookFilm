@@ -7,12 +7,24 @@
 
 import { useState, useRef } from 'react';
 import { useUserData } from '@/hooks/useUserData';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function SettingsPage() {
   const { userData, exportData, importData, clearAll, isLoading } = useUserData();
   const [importError, setImportError] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Theme hook - safe for SSR
+  let theme: 'light' | 'dark' = 'light';
+  let toggleTheme: () => void = () => {};
+  try {
+    const themeContext = useTheme();
+    theme = themeContext.theme;
+    toggleTheme = themeContext.toggleTheme;
+  } catch (e) {
+    // Theme context not available during SSR, use default
+  }
 
   const handleExport = () => {
     try {
@@ -68,6 +80,34 @@ export default function SettingsPage() {
         </h1>
         <p className="text-sm text-gray-600 dark:text-gray-400">
           Manage your data
+        </p>
+      </div>
+
+      {/* Theme Toggle */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          Appearance
+        </h2>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Theme</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Switch between light and dark mode</p>
+          </div>
+          <button
+            onClick={toggleTheme}
+            className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            role="switch"
+            aria-checked={theme === 'dark'}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                theme === 'dark' ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          Current: {theme === 'dark' ? 'Dark' : 'Light'} mode
         </p>
       </div>
 
