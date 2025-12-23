@@ -205,9 +205,11 @@ The app features a mobile-first design with:
 
 ### ⚠️ Important: Environment Variables
 
-**Before deploying, you MUST add your API keys to Vercel!**
+**Before deploying, you MUST add your API keys to your hosting platform!**
 
-See [VERCEL_SETUP.md](./VERCEL_SETUP.md) for detailed step-by-step instructions on adding environment variables to Vercel.
+See [VERCEL_SETUP.md](./VERCEL_SETUP.md) for Vercel-specific instructions, or [DEPLOYMENT_ALTERNATIVES.md](./DEPLOYMENT_ALTERNATIVES.md) for other hosting options.
+
+**Note**: Once deployed, your website is **publicly accessible** - no login required for visitors! You only need to log into the hosting platform to manage/deploy the site.
 
 ### Deploy to Vercel (Recommended - Free)
 
