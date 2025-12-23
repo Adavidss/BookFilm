@@ -2,6 +2,8 @@
 
 A personal TV show and book recommender with Goodreads-like features. Built as a clean, hackable side project using Next.js and TypeScript. Features mobile-first design, cross-recommendations, and comprehensive tracking features.
 
+🌐 **Live Demo**: [Deploy to Vercel](https://vercel.com) to get your app running in minutes!
+
 ## Features
 
 ### Core Functionality
@@ -201,26 +203,44 @@ The app features a mobile-first design with:
 
 ## Deployment
 
-### Vercel (Recommended)
+### Deploy to Vercel (Recommended - Free)
 
-```bash
-npm install -g vercel
-vercel
-```
+The easiest way to get your app live:
 
-Add environment variables in Vercel dashboard:
-- `NEXT_PUBLIC_TMDB_API_KEY`
-- `NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY` (optional)
+1. **Go to [Vercel](https://vercel.com)**
+   - Sign up or log in with your GitHub account
 
-### Other Platforms
+2. **Import Your Repository**
+   - Click "Add New Project" or "Import Project"
+   - Select your `BookFilm` repository from GitHub
+   - Click "Import"
 
-Build and deploy:
+3. **Configure Environment Variables**
+   - In the project settings, go to "Environment Variables"
+   - Add the following:
+     - **Name**: `NEXT_PUBLIC_TMDB_API_KEY`
+       **Value**: Your TMDB API key (get it from [TMDB API Settings](https://www.themoviedb.org/settings/api))
+     - **Name**: `NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY`
+       **Value**: Your Google Books API key (optional, but recommended)
 
-```bash
-npm run build
-```
+4. **Deploy**
+   - Click "Deploy"
+   - Vercel will automatically:
+     - Install dependencies
+     - Build your Next.js app
+     - Deploy it to a live URL
+   - You'll get a URL like `https://bookfilm.vercel.app` or `https://bookfilm-[your-username].vercel.app`
 
-Deploy the `.next` folder to any static host that supports Next.js.
+5. **Automatic Updates**
+   - Every time you push to GitHub, Vercel will automatically redeploy your app
+   - You can also set up custom domains in the project settings
+
+### Other Deployment Options
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions on:
+- Vercel CLI deployment
+- GitHub Pages (static export)
+- Other hosting platforms (Netlify, Railway, Render, etc.)
 
 ## Troubleshooting
 
