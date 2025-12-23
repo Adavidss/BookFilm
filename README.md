@@ -1,29 +1,34 @@
-# ShowBook Recommender
+# BookFilm (ShowBook Recommender)
 
-A personal TV show and book recommender built as a clean, hackable side project. Uses simple content-based filtering with explainable recommendations — no LLMs, no AI hype, just useful logic.
-
-## Philosophy
-
-- **Simple & Explainable**: Every recommendation has clear reasons (genre matches, theme overlap, etc.)
-- **No Onboarding**: Goodreads-style interaction — search, add to list, get recommendations
-- **Content-Based**: Deterministic recommendations based on genres, tags, and themes
-- **Personal Use**: No social features, no tracking, no unnecessary complexity
-- **Hackable**: Clean code structure, easy to extend and customize
+A personal TV show and book recommender with Goodreads-like features. Built as a clean, hackable side project using Next.js and TypeScript. Features mobile-first design, cross-recommendations, and comprehensive tracking features.
 
 ## Features
 
 ### Core Functionality
-- 📚 **Books Section**: Search books, maintain reading list, get recommendations
-- 📺 **TV Shows Section**: Search shows, track watched list, get recommendations
-- 🔍 **Discovery**: Browse trending, new releases, and upcoming content
-- 🔀 **Cross-Recommendations**: Get book suggestions from TV shows and vice versa
+- 📚 **Books Section**: Search books, maintain reading list with status tracking, get personalized recommendations
+- 📺 **TV Shows Section**: Search shows, track watched list, get personalized recommendations
+- 🔀 **Cross-Recommendations**: Get book suggestions from TV shows and vice versa (genre-based matching)
+- 📱 **Mobile-First Design**: Bottom navigation bar, responsive grid layouts, touch-friendly interface
+
+### Goodreads-Like Features
+- ⭐ **Ratings**: Rate books and shows (1-5 stars)
+- ✍️ **Reviews**: Write detailed reviews with spoiler tags
+- 📊 **Progress Tracking**: Track reading progress (pages) and watching progress (seasons/episodes)
+- 📅 **Date Tracking**: Record start dates, finish dates, and re-read dates
+- 🏷️ **Custom Tags**: Add custom tags to organize your collection
+- 📝 **Notes**: Add notes to books and shows (with page/episode references)
+- 📚 **Reading Challenges**: Create and track annual/monthly reading goals
+- 📈 **Statistics**: View reading and watching statistics
+- 🎯 **Series Tracking**: Track book and TV series progress
 
 ### Smart Features
-- Genre and theme-based matching
-- Explainable recommendation reasons
+- Genre and theme-based matching with explainable recommendations
+- Cross-recommendations between books and TV shows based on genre mapping
 - Streaming platform availability (for shows)
 - Book retailer links (Amazon, Kindle, Audible)
+- Google Books ratings display
 - Clean, minimal UI with dark mode support
+- iOS "Add to Home Screen" support
 
 ## Tech Stack
 
@@ -32,34 +37,38 @@ A personal TV show and book recommender built as a clean, hackable side project.
 - **Data APIs**:
   - [TMDB API](https://www.themoviedb.org/documentation/api) for TV shows
   - [Google Books API](https://developers.google.com/books) for books
-  - Optional: Watchmode API for streaming availability
 - **Storage**: LocalStorage (client-side persistence)
 
 ## Project Structure
 
 ```
-showbook-recommender/
+Book-TV-Recommender/
 ├── app/                          # Next.js App Router pages
 │   ├── page.tsx                 # Books page (home)
 │   ├── shows/page.tsx           # TV Shows page
-│   ├── discovery/page.tsx       # Discovery page
-│   ├── cross-recommendations/   # Cross-recommendations
+│   ├── cross-recommendations/   # Cross-recommendations page
+│   ├── challenges/page.tsx      # Reading challenges
+│   ├── statistics/page.tsx      # Statistics dashboard
+│   ├── settings/page.tsx        # Settings page
 │   ├── layout.tsx               # Root layout
 │   └── globals.css              # Global styles
 ├── components/                   # React components
 │   ├── Layout.tsx               # Main layout with navigation
-│   ├── SearchBar.tsx            # Search component
 │   ├── BookCard.tsx             # Book display card
-│   └── ShowCard.tsx             # TV show display card
+│   ├── ShowCard.tsx             # TV show display card
+│   ├── EnhancedDetailModal.tsx  # Detailed view modal
+│   ├── ReviewEditor.tsx         # Review editor
+│   ├── ProgressTracker.tsx      # Progress tracking component
+│   ├── ChallengeCard.tsx        # Challenge display
+│   └── ...                      # Other components
 ├── lib/                         # Core logic
 │   └── recommendationEngine.ts  # Recommendation algorithms
 ├── hooks/                       # React hooks
 │   └── useUserData.ts          # User data management
 ├── utils/                       # Utilities
 │   └── api.ts                  # API integration functions
-├── types/                       # TypeScript types
-│   └── index.ts                # Type definitions
-└── data/                        # Optional data files
+└── types/                       # TypeScript types
+    └── index.ts                # Type definitions
 ```
 
 ## Setup Instructions
@@ -105,7 +114,7 @@ Books work without a key but with rate limits. For better performance:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3001](http://localhost:3001)
 
 ### 4. Build for Production
 
@@ -122,192 +131,96 @@ The recommendation system (`lib/recommendationEngine.ts`) uses content-based fil
 
 1. **Genre Matching**: Compares genres between items (exact matches score highest)
 2. **Tag/Theme Matching**: Compares descriptive tags and themes
-3. **Score Calculation**: Weights matches and ranks candidates
-4. **Explainable Reasons**: Generates human-readable explanations
-
-Example recommendation flow:
-```typescript
-// User has read "Dune" (sci-fi, space opera, politics)
-// System finds "Foundation" (sci-fi, space opera, empire)
-// Match: 2 genres + 1 theme = high score
-// Reason: "Shares genres: sci-fi, space opera"
-```
+3. **Cross-Recommendations**: Maps TV show genres to book genres for cross-recommendations
+4. **Score Calculation**: Weights matches and ranks candidates
+5. **Explainable Reasons**: Generates human-readable explanations
 
 ### User Data Storage
 
 All user data is stored in browser localStorage:
 - No backend required
 - Data persists across sessions
-- Easy to export/import (future feature)
 - Privacy-focused (data never leaves browser)
 
-Structure:
-```json
-{
-  "readBooks": [
-    {
-      "book": { /* book object */ },
-      "addedAt": 1234567890
-    }
-  ],
-  "watchedShows": [
-    {
-      "show": { /* show object */ },
-      "addedAt": 1234567890
-    }
-  ]
-}
-```
+Data structure includes:
+- Books and shows with ratings, reviews, progress, dates
+- Custom tags and notes
+- Reading challenges
+- Series tracking
+- Reading goals and streaks
 
 ### API Integration
 
 **TV Shows** (`utils/api.ts`):
 - Uses TMDB v3 API
-- Search, trending, upcoming endpoints
-- Fetches genres, posters, metadata
+- Search, popular, trending, genre-based endpoints
+- Fetches genres, posters, metadata, ratings
 
 **Books** (`utils/api.ts`):
 - Uses Google Books API v1
 - Search by title/author
-- Fetches genres, covers, descriptions
+- Genre-based searches
+- Fetches genres, covers, descriptions, ratings
 
-**Streaming Availability**:
-- Placeholder for Watchmode API integration
-- Can be manually curated for popular shows
-- See `utils/api.ts` for implementation notes
+## Features in Detail
 
-## Customization Guide
+### Books & Shows Management
+- Add items with status (want-to-read/want-to-watch, reading/watching, read/watched, dropped)
+- Rate items with 1-5 star ratings
+- Write detailed reviews with spoiler tags
+- Track progress (pages for books, seasons/episodes for shows)
+- Record dates (start, finish, re-read dates)
+- Add custom tags and notes
 
-### Adding New Recommendation Criteria
+### Cross-Recommendations
+- Get book recommendations based on TV shows you've watched
+- Get TV show recommendations based on books you've read
+- Genre-based matching with intelligent mapping
+- Shows multiple recommendations in a grid layout
 
-Edit `lib/recommendationEngine.ts`:
+### Challenges
+- Create annual reading challenges (books or pages)
+- Create monthly reading challenges
+- Create genre-specific challenges
+- Track progress and completion status
 
-```typescript
-// Add a new scoring factor
-const WEIGHTS = {
-  EXACT_GENRE_MATCH: 10,
-  TAG_MATCH: 3,
-  AUTHOR_MATCH: 5,  // NEW: bonus for same author
-};
+### Statistics
+- View total books read and shows watched
+- See reading/watching statistics
+- Track reading streaks
+- View genre distribution
 
-// Update scoring function
-function scoreItem(...) {
-  // Add your logic
-  if (userItem.authors.includes(candidate.author)) {
-    totalScore += WEIGHTS.AUTHOR_MATCH;
-  }
-}
+## Mobile-First Design
+
+The app features a mobile-first design with:
+- Fixed bottom navigation bar on mobile
+- Responsive grid layouts (2 columns on mobile, up to 5 on desktop)
+- Touch-friendly tap targets
+- Simplified UI optimized for mobile use
+- iOS "Add to Home Screen" support
+
+## Deployment
+
+### Vercel (Recommended)
+
+```bash
+npm install -g vercel
+vercel
 ```
 
-### Adding Collaborative Filtering
+Add environment variables in Vercel dashboard:
+- `NEXT_PUBLIC_TMDB_API_KEY`
+- `NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY` (optional)
 
-Implement `getCollaborativeRecommendations()` in `lib/recommendationEngine.ts`:
+### Other Platforms
 
-```typescript
-export function getCollaborativeRecommendations(...) {
-  // Option 1: Manual curation
-  const similarItems = {
-    'book-123': ['book-456', 'book-789'],
-  };
+Build and deploy:
 
-  // Option 2: Import from external service
-  // Option 3: Aggregate from friends' data
-
-  return similarItems[itemId] || [];
-}
+```bash
+npm run build
 ```
 
-### Adding More Data Sources
-
-Create new API functions in `utils/api.ts`:
-
-```typescript
-// Example: Add OpenLibrary API
-export async function searchBooksOpenLibrary(query: string): Promise<Book[]> {
-  const response = await fetch(
-    `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`
-  );
-  const data = await response.json();
-  return data.docs.map(doc => ({
-    id: `ol-${doc.key}`,
-    title: doc.title,
-    authors: doc.author_name || [],
-    genres: doc.subject?.slice(0, 3) || [],
-    // ... map other fields
-  }));
-}
-```
-
-### Styling & Theming
-
-Colors are defined in `tailwind.config.js`:
-
-```javascript
-theme: {
-  extend: {
-    colors: {
-      primary: '#3b82f6',    // Blue
-      secondary: '#8b5cf6',  // Purple
-      accent: '#ec4899',     // Pink
-    },
-  },
-}
-```
-
-## Advanced Features (Optional)
-
-### Import/Export User Data
-
-Add to `hooks/useUserData.ts`:
-
-```typescript
-const exportData = () => {
-  const json = JSON.stringify(userData, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  // Trigger download
-};
-
-const importData = (file: File) => {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const imported = JSON.parse(e.target.result);
-    setUserData(imported);
-  };
-  reader.readAsText(file);
-};
-```
-
-### Preload Popular Content
-
-Create `data/popular-shows.json` and `data/popular-books.json`:
-
-```json
-[
-  {
-    "id": "tv-1234",
-    "title": "Breaking Bad",
-    "genres": ["Crime", "Drama", "Thriller"],
-    "platforms": [{"name": "Netflix"}]
-  }
-]
-```
-
-Load in discovery page for faster initial experience.
-
-### Add User Ratings
-
-Extend types in `types/index.ts`:
-
-```typescript
-interface UserBook {
-  book: Book;
-  addedAt: number;
-  rating?: 1 | 2 | 3 | 4 | 5;  // NEW
-}
-```
-
-Use ratings to weight recommendations (higher-rated books influence more).
+Deploy the `.next` folder to any static host that supports Next.js.
 
 ## Troubleshooting
 
@@ -321,45 +234,15 @@ Use ratings to weight recommendations (higher-rated books influence more).
 - Try adding an API key (see setup instructions)
 - Check network tab for API response errors
 
-### Images not loading
-- Ensure `next.config.js` includes image domains:
-  ```javascript
-  images: {
-    domains: ['image.tmdb.org', 'books.google.com'],
-  }
-  ```
+### Cross-recommendations not working
+- Ensure you have at least one book or show in your list
+- Check browser console for API errors
+- Verify genre mapping is working correctly
 
 ### User data not persisting
 - Check browser localStorage is enabled
 - Clear browser cache and try again
 - Check browser console for storage errors
-
-## Deployment
-
-### Vercel (Recommended)
-
-```bash
-npm install -g vercel
-vercel
-```
-
-Add environment variables in Vercel dashboard.
-
-### Other Platforms
-
-Build static export:
-```bash
-npm run build
-```
-
-Deploy the `.next` folder to any static host.
-
-## Contributing
-
-This is a personal project template, but feel free to:
-- Fork and customize for your own use
-- Submit issues for bugs
-- Share improvements and extensions
 
 ## License
 
@@ -373,4 +256,4 @@ MIT - Use freely for personal or educational purposes
 
 ---
 
-**Remember**: This is a tool for personal use. Keep it simple, keep it hackable, keep it useful. No AI hype needed.
+**Note**: This is a personal project for tracking books and TV shows with Goodreads-like features. All data is stored locally in your browser.
